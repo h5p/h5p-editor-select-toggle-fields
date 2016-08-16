@@ -3,6 +3,9 @@ H5PEditor.SelectToggleFields = (function ($) {
   function SelectToggleFields(parent, field, params, setValue) {
     var self = this;
 
+    // Set default value:
+    params = params || '';
+
     self.field = field;
     // Outsource readies
     self.passReadies = true;
