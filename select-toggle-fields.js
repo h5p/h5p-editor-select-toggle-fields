@@ -48,9 +48,11 @@ H5PEditor.SelectToggleFields = (function ($) {
         type: field.type,
         label: field.label,
         options: field.options,
-        optional: field.optional
+        optional: field.optional,
+        default: field.default
       }
     ];
+
 
     H5PEditor.processSemanticsChunk(semantics, params, $selectWrapper, self);
 
