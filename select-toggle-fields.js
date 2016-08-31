@@ -1,5 +1,16 @@
 H5PEditor.SelectToggleFields = (function ($) {
 
+  if (Function.prototype.clone === undefined) {
+    Function.prototype.clone = function() {
+      var that = this;
+      var temp = function temporary() { return that.apply(this, arguments); };
+      for( key in this ) {
+          temp[key] = this[key];
+      }
+      return temp;
+    };
+  }
+
   function SelectToggleFields(parent, field, params, setValue) {
     var self = this;
 
@@ -9,6 +20,7 @@ H5PEditor.SelectToggleFields = (function ($) {
     self.field = field;
     // Outsource readies
     self.passReadies = true;
+    self.value = params;
 
     var fieldsToHide = [];
     var nameToFieldMap = {};
@@ -20,12 +32,20 @@ H5PEditor.SelectToggleFields = (function ($) {
           option.hideFields.forEach(function (path) {
             var f = H5PEditor.findField(path, parent);
             if (f.getDomElement !== undefined) {
+
               var $element = f.getDomElement();
               fieldsToHide.push($element);
               if (nameToFieldMap[option.value] === undefined) {
                 nameToFieldMap[option.value] = [];
               }
+              var originalValidate = f.validate.clone();
               nameToFieldMap[option.value].push($element);
+              // Override validate function, so that we do not validate hidden
+              // elements
+              f.validate = function () {
+                // if not hidden - let's validate
+                return ($element.hasClass('h5peditor-select-toggle-field-hide') ? true : originalValidate());
+              };
             }
             else {
               //throw
@@ -53,7 +73,6 @@ H5PEditor.SelectToggleFields = (function ($) {
       }
     ];
 
-
     H5PEditor.processSemanticsChunk(semantics, params, $selectWrapper, self);
 
     var updateUI = function (value) {
@@ -65,11 +84,9 @@ H5PEditor.SelectToggleFields = (function ($) {
           fieldsToHide[i].removeClass('h5peditor-select-toggle-field-hide');
         }
 
-        if (fields) {
-          fields.forEach(function (f) {
-            f.addClass('h5peditor-select-toggle-field-hide');
-          });
-        }
+        fields.forEach(function (f) {
+          f.addClass('h5peditor-select-toggle-field-hide');
+        });
       }
       else {
         // Hide all fields:
@@ -80,9 +97,9 @@ H5PEditor.SelectToggleFields = (function ($) {
     };
 
     $selectWrapper.find('select').on('change', function () {
-      var value = $(this).val();
-      setValue(self.field, value);
-      updateUI(value);
+      self.value = $(this).val();
+      setValue(self.field, self.value);
+      updateUI(self.value);
     });
 
     /**
