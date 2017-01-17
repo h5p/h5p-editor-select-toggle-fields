@@ -4,9 +4,17 @@
   "license": "MIT",
   "author": "fnoks",
   "majorVersion": 1,
-  "minorVersion": 0,
+  "minorVersion": 1,
   "patchVersion": 0,
   "runnable": 0,
-  "preloadedJs": [{ "path": "select-toggle-fields.js" }],
-  "preloadedCss": [{ "path": "select-toggle-fields.css" }]
+  "preloadedJs": [
+    {
+      "path": "select-toggle-fields.js"
+    }
+  ],
+  "preloadedCss": [
+    {
+      "path": "select-toggle-fields.css"
+    }
+  ]
 }
