@@ -1,7 +1,7 @@
 H5PEditor.SelectToggleFields = (function ($) {
 
   if (Function.prototype.clone === undefined) {
-    Function.prototype.clone = function() {
+    Function.prototype.clone = function () {
       var that = this;
       var temp = function temporary() {
         return that.apply(this, arguments);
